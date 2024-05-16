@@ -1,0 +1,197 @@
+﻿Supermarket
+
+rails g scaffold Users name:strimg .....
+root "users#index"
+
+#html code for searching - place this in index.html
+<%= form_tag users_path, method: :get do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search by name" %>
+  <%= submit_tag "Search", name: nil %>
+<% end %>
+
+#place this in controllers
+def index
+  @users = if params[:search]
+             User.where('name LIKE ?', "%#{params[:search]}%")
+           else
+             User.all
+           end
+end
+....
+
+
+Form tag - with submit and Reset button, dropdown menu as well
+
+<%= form_tag({action: "create"}, method: "post") do %>
+  <!-- Your form fields here -->
+  <%= text_field_tag "name", nil, placeholder: "Name" %>
+  <%= text_field_tag "contact_number", nil, placeholder: "Contact Number" %>
+  <%= select_tag "gender", options_for_select(["Male", "Female", "Other"], selected: nil), prompt: "Select Gender" %>
+  <%= select_tag "favorite_item", options_for_select(["Item 1", "Item 2", "Item 3"], selected: nil), prompt: "Select Favorite Item" %>
+
+  <!-- Submit Button -->
+  <%= submit_tag "Submit", class: "btn btn-primary" %>
+
+  <!-- Reset Button -->
+  <%= button_tag "Reset", type: "reset", class: "btn btn-secondary" %>
+<% end %>
+
+....
+
+
+#add to _form.html.erb - drop down menu
+<div>
+    <%= form.label :source_station, style: "display: block" %>
+    <%= form.select :source_station, ["Manali", "Goa", "Munnar"], prompt: "Select Your Source" %>
+  </div>
+
+  <div>
+    <%= form.label :destination_station, style: "display: block" %>
+    <%= form.select :destination_station, ["Ooty", "Koonur", "Sikkim"], prompt: "Select Your Destination" %>
+  </div>
+
+....
+
+
+#check boxes and radio buttons
+<div>
+    <%= form.label :items, style: "display: block" %>
+    <% items = ["Option 1", "Option 2", "Option 3", "Option 4"] %>
+    <% items.each do |item| %>
+      <label>
+        <%= form.check_box :items, { multiple: true }, item %>
+        <%= item %>
+      </label>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :payment_method, style: "display: block" %>
+    <% payment_methods = ["MasterCard", "Visa"] %>
+    <% payment_methods.each do |method| %>
+      <label>
+        <%= form.radio_button :payment_method, method %>
+        <%= method %>
+      </label>
+    <% end %>
+  </div>
+
+....
+
+
+#button - reset
+<div>
+    <button type="button" onclick="resetForm()">Reset</button>
+  </div>
+
+
+<script>
+  function resetForm() {
+    document.getElementById("trip_name").value = "";
+    document.getElementById("trip_address").value = "";
+    document.getElementById("trip_phone_no").value = "";
+    document.getElementById("trip_no_of_passenger").value = "";
+    document.getElementById("trip_passenger_name").value = "";
+    document.getElementById("trip_age").value = "";
+    document.querySelectorAll('input[name="trip[items][]"]').forEach(item => item.checked = false);
+    document.querySelectorAll('input[name="trip[payment_method]"]').forEach(method => method.checked = false);
+  }
+</script>
+
+....
+/* app/assets/stylesheets/patients.css */
+.patient {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.record {
+  margin-left: 20px;
+  border-left: 2px solid #ccc;
+  padding-left: 10px;
+}
+
+<!-- app/views/patients/index.html.erb -->
+<%= form_tag(patients_path, method: "get") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search by first name" %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+<% @patients.each do |patient| %>
+  <div class="patient">
+    <h2><%= patient.first_name %> <%= patient.middle_name %> <%= patient.last_name %></h2>
+    <div class="records">
+      <% patient.records.each do |record| %>
+        <div class="record">
+          <p>Date: <%= record.date %></p>
+          <p>Description: <%= record.description %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+....
+
+rails generate model Student ssn:string name:string age:integer
+
+# app/models/student.rb
+class Student < ApplicationRecord
+  validates :ssn, format: { with: /\A[1-4][A-Z]{2}\d{2}[A-Z]{2}\d{3}\z/, message: "should start with a digit from 1-4 followed by 2 uppercase alphabets then 2 digits then 2 uppercase alphabets and 3 digits" }
+end
+
+rails db:migrate
+
+<!-- app/views/students/index.html.erb -->
+<%= form_with(url: students_path, method: "get") do |form| %>
+  <div>
+    <%= form.label :ssn, "Enter SSN" %>
+    <%= form.text_field :ssn %>
+  </div>
+  
+  <%= form.submit "Search" %>
+<% end %>
+
+<% if @student.present? %>
+  <div>
+    <h3>Student Details</h3>
+    <p>Name: <%= @student.name %></p>
+    <p>Age: <%= @student.age %></p>
+  </div>
+<% end %>
+
+# app/controllers/students_controller.rb
+class StudentsController < ApplicationController
+  def index
+    if params[:ssn].present?
+      @student = Student.find_by(ssn: params[:ssn])
+      unless @student
+        flash.now[:alert] = "Student not found with provided SSN"
+      end
+    end
+  end
+end
+
+<!-- app/views/layouts/application.html.erb -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SSN Validation</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+<body>
+  <% flash.each do |type, message| %>
+    <div class="alert alert-<%= type %>">
+      <%= message %>
+    </div>
+  <% end %>
+
+  <%= yield %>
+</body>
+</html>
+
