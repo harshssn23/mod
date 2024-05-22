@@ -1,0 +1,41 @@
+  # GET /contactnos or /contactnos.json
+  def index
+    # @contactnos = Contactno.all
+    @contactnos = if params[:search]
+      Contactno.where('telephone LIKE ?', "%#{params[:search]}%")
+    else
+      Contactno.all
+    end
+  end
+
+<%= form_tag contactnos_path, method: :get do %>
+<%= text_field_tag :search, params[:search], placeholder: "Search by name" %>
+<%= submit_tag "Search", name: nil %>
+<% end %>
+
+.......
+#Validation
+
+class Contactno < ApplicationRecord
+    validates :name, presence: true
+    # validates :telephone, presence: true, format: { with: /\A\d{3}-\d{3}-\d{4}\z/, message: "must be in the format ddd-ddd-dddd" }
+    validates :telephone, format: {with:/\A\d{3}-\d{3}-\d{4}\z/, message: "Enter the telephone no in  the fromat ddd-ddd-dddd"}
+end
+
+#placeholder
+ <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name, placeholder:'name' %>
+  </div>
+  <br>
+  <div>
+    <%= form.label :telephone, style: "display: block" %>
+    <%= form.text_field :telephone, placeholder:'ddd-ddd-dddd' %>
+  </div>
+
+.....
+#validate Ssn Id
+class User < ApplicationRecord
+    # validates :name, length:{minimum:5}
+    validates :name, format: { with: /\A[1-4][A-Z]{2}\d{2}[A-Z]{2}\d{3}\z/, message: "should start with a digit from 1-4 followed by 2 uppercase alphabets then 2 digits then 2 uppercase alphabets and 3 digits" }
+end

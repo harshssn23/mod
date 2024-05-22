@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .image-container {
+            position: relative;
+            width: 300px; /* Set appropriate width */
+            height: 300px; /* Set appropriate height */
+        }
+
+        .overlap-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: z-index 0.3s ease, opacity 0.3s ease;
+            opacity: 0.8; /* Set initial opacity to make overlapping visible */
+        }
+
+        .overlap-image:hover {
+            z-index: 10;
+            opacity: 1;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 13%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 2px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <!-- <h1>Enter your Credit Card Details</h1>
+    <form action="" onsubmit="validate()">
+        <label for="username">Name</label> 
+        <input type="text" id="username" placeholder="username">
+        <br><br>
+
+        Catlog <br>
+        <input type="checkbox" name="bulb" id="b1" value="10">
+        <label for="b1">Bulb 1 - Rs 10</label>
+        <br>
+        <input type="checkbox" name="bulb" id="b2" value="20">
+        <label for="b2">Bulb 2 - Rs 20</label>
+        <br>
+        <input type="checkbox" name="bulb" id="b3" value="30">
+        <label for="b3">Bulb 3 - Rs 30</label>
+        <br>
+        <input type="checkbox" name="bulb" id="b4" value="40">
+        <label for="b4">Bulb 4 - Rs 40</label>
+        <br>
+        <br>
+
+
+        Payment Mode <br>
+        <input type="radio" name="options" id="payment1" value="visa">
+        <label for="payment1">Visa</label>
+
+        <input type="radio" name="options" id="payment2" value="mastercard">
+        <label for="payment2">Master Card</label> -->
+
+
+
+
+        <!-- <label for="option1">
+            <input type="radio" id="option1" name="options" value="option1">
+            Option 1
+        </label>
+        <label for="option2">
+            <input type="radio" id="option2" name="options" value="option2">
+            Option 2
+        </label> -->
+
+
+
+        <!-- <label for="creditcardno">Credit Card Number</label>
+        <input type="text" id="creditcardno" placeholder="enter 16 digit card no">
+        <br>
+        <label for="cvv">Cvv</label>
+        <input type="text" id="cvv" placeholder="enter 3 digit cvv">
+        <br>
+        <label for="month">Expiry Month</label>
+        <input type="text" id="month" placeholder="enter epiry month">
+        <br>
+        <label for="month">Expiry Year</label>
+        <input type="text" id="year" placeholder="enter epiry year">
+        <br> -->
+
+
+        <!-- <br><br>
+        <input type="submit" id="submit">
+
+        <p id="demo"></p>
+    </form> -->
+
+
+    <div class="image-container">
+        <img src="image1.jpg" alt="Image 1" class="overlap-image" id="image1"> 
+        <img src="image2.jpg" alt="Image 2" class="overlap-image" id="image2"> 
+        <img src="image3.jpg" alt="Image 3" class="overlap-image" id="image3">
+    </div>
+
+    <h2>Student Information</h2>
+    <br>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Roll No</th>
+        </tr>
+        <tr>
+            <td>John Doe</td>
+            <td>001</td>
+        </tr>
+        <tr>
+            <td>Jane Smith</td>
+            <td>002</td>
+        </tr>
+        <tr>
+            <td>Alice Johnson</td>
+            <td>003</td>
+        </tr>
+        <tr>
+            <td>Bob Brown</td>
+            <td>004</td>
+        </tr>
+        <tr>
+            <td>Eve Wilson</td>
+            <td>005</td>
+        </tr>
+    </table>
+
+    <script>
+
+        function validate(){
+
+            const name = document.getElementById('username').value;
+            // const no = document.getElementById('creditcardno').value;
+            // const cvv = document.getElementById('cvv').value;
+            // const month = document.getElementById('month').value;
+            // const year = document.getElementById('year').value;
+
+            // const curryr = new Date().getFullYear()
+
+            if(!name){
+                alert("Name can't be empty");
+                return false
+            }
+            // if(!/^\d{16}$/.test(no)){
+            //     alert("Credit Card number must be 16 digit");
+            //     return false
+            // }
+            // if(!/^\d{3}$/.test(cvv)){
+            //     alert("Cvv must be exactly 3 digits");
+            //     return false
+            // }
+            // const mon=parseInt(month,10)
+            // if(!/^\d{1,2}$/.test(mon) || mon<1 || mon>12){
+            //     alert("Month should be between 1 to 12");
+            //     return false
+            // }
+            // const yr=parseInt(year,10)
+            // if(!/^\d{4}$/.test(yr) || yr<curryr){
+            //     alert("Expiry year should be current year or greater than current year");
+            //     return false
+            // }
+            // Get all checkboxes
+            const checkboxes = document.querySelectorAll('input[name="bulb"]:checked');
+            
+            // If no checkbox is selected, alert the user
+            if (checkboxes.length === 0) {
+                alert("Please select at least one bulb.");
+                return false;
+            }
+
+            // Calculate total amount of selected bulbs
+            let totalAmount = 0;
+            checkboxes.forEach((checkbox) => {
+                totalAmount += parseFloat(checkbox.value);
+            });
+
+            // Calculate GST (13.5%)
+            const gst = totalAmount * 0.135;
+            const totalAmountWithGST = totalAmount + gst;
+
+            let v=document.getElementById('demo');
+            // v.innerHTML='Total amount including GST: Rs'+ $(totalAmountWithGST.toFixed(2));
+            v.innerHTML = 'Total amount including GST: Rs ' + totalAmountWithGST.toFixed(2);
+
+            // Display the total amount with GST
+            // alert(`Total amount including GST: Rs ${totalAmountWithGST.toFixed(2)}`);
+
+            // Prevent form submission
+            return false;
+
+            // alert("Form Submitted Succesfully")
+            // return true
+        }
+        // Attach validate function to form submit event
+        document.querySelector('form').onsubmit = function(event) {
+            if (!validate()) {
+                event.preventDefault();  // Prevent form submission if validation fails
+            }
+        };
+
+
+        document.querySelectorAll('.overlap-image').forEach(image => {
+        image.addEventListener('mouseover', function() {
+            document.querySelectorAll('.overlap-image').forEach(img => {
+                img.style.zIndex = '1'; // Reset z-index of all images
+                img.style.opacity = '0.8'; // Reset opacity of all images
+            });
+            this.style.zIndex = '10'; // Set z-index of the hovered image to be on top
+            this.style.opacity = '1'; // Set opacity of the hovered image to be fully visible
+        });
+    });
+
+
+        
+    </script>
+</body>
+</html>
